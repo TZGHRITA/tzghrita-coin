@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tzghrita ($TZGH)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #E2725B; /* terracotta */
-            color: #2A1A1F; /* dark brown */
+            background-color: #E2725B;
+            color: #2A1A1F;
             margin: 0;
             padding: 0;
             display: flex;
@@ -25,10 +26,34 @@
             margin: 0 auto;
         }
 
+        .logo-container {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 5px solid #2A1A1F;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 1.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
         .logo {
-            max-width: 200px;
+            max-width: 80%;
             height: auto;
-            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .playing {
+            animation: pulse 0.5s infinite alternate;
+            border-color: #F5A623;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); box-shadow: 0 0 10px rgba(245,166,35,0.5); }
+            to { transform: scale(1.05); box-shadow: 0 0 20px rgba(245,166,35,0.8); }
         }
 
         h1 {
@@ -43,7 +68,7 @@
             opacity: 0.9;
         }
 
-        .play-btn {
+        .btn {
             background-color: #2A1A1F;
             color: #F5F5DC;
             border: none;
@@ -52,15 +77,49 @@
             border-radius: 50px;
             cursor: pointer;
             transition: transform 0.1s;
-            margin: 2rem 0;
+            margin: 0.5rem;
+            display: inline-block;
+            text-decoration: none;
         }
 
-        .play-btn:hover {
+        .btn:hover {
             transform: scale(1.05);
+            background-color: #3D2B2F;
         }
 
-        .play-btn:active {
-            transform: scale(0.98);
+        .contract-box {
+            background: linear-gradient(135deg, rgba(42,26,31,0.2) 0%, rgba(226,114,91,0.1) 100%);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            word-break: break-all;
+            border: 1px solid rgba(42,26,31,0.3);
+        }
+
+        .contract-address {
+            font-family: monospace;
+            cursor: pointer;
+            font-weight: bold;
+            color: #2A1A1F;
+            transition: color 0.2s;
+        }
+
+        .contract-address:hover {
+            color: #F5A623;
+        }
+
+        .social {
+            margin-top: 2rem;
+        }
+
+        .x-logo {
+            width: 40px;
+            height: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .x-logo:hover {
+            transform: scale(1.1) rotate(-5deg);
         }
 
         footer {
@@ -72,27 +131,85 @@
         audio {
             display: none;
         }
+
+        .toast {
+            visibility: hidden;
+            background-color: #2A1A1F;
+            color: #F5F5DC;
+            text-align: center;
+            border-radius: 5px;
+            padding: 0.5rem;
+            position: fixed;
+            bottom: 30px;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="tzghrita.png" alt="Tzghrita Logo" class="logo">
+        <div class="logo-container" id="logoContainer">
+            <img src="tzghrita.png" alt="Tzghrita Logo" class="logo" id="logo">
+        </div>
         <h1>Tzghrita ($TZGH)</h1>
         <p class="tagline">The Sound of Celebration on the Blockchain!</p>
         
-        <button class="play-btn" onclick="playSound()">Play Tzghrita</button>
+        <button class="btn" onclick="playSound()">🎶 Play Tzghrita</button>
+        <a href="https://four.meme/token/0x895090ddfd72088d351f3a49529d7004ef6730e7" class="btn" target="_blank">💰 Buy $TZGH</a>
+        
+        <div class="contract-box">
+            <p>Contract Address:</p>
+            <p id="contractAddress" class="contract-address" onclick="copyContract()">0x1234...5678</p>
+            <small>(Click to copy)</small>
+        </div>
+        
+        <div class="social">
+            <a href="https://x.com/TZGHRITA" target="_blank" aria-label="X (Twitter)">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/X_icon_2.svg" alt="X" class="x-logo">
+            </a>
+        </div>
         
         <audio id="tzghritaSound" src="tzghrita.mp3"></audio>
+        <div id="toast" class="toast">Copied to clipboard!</div>
         
         <footer>Join the celebration with $TZGH!</footer>
     </div>
 
     <script>
+        // Play sound function with logo animation
         function playSound() {
             const sound = document.getElementById('tzghritaSound');
-            sound.currentTime = 0; // Rewind to start
+            const logoContainer = document.getElementById('logoContainer');
+            const logo = document.getElementById('logo');
+            
+            sound.currentTime = 0;
             sound.play().catch(e => console.log("Audio play failed:", e));
+            
+            // Add playing class
+            logoContainer.classList.add('playing');
+            logo.classList.add('playing');
+            
+            // Remove class when sound ends
+            sound.onended = function() {
+                logoContainer.classList.remove('playing');
+                logo.classList.remove('playing');
+            };
         }
+
+        // Copy contract address
+        function copyContract() {
+            const contract = document.getElementById('contractAddress');
+            navigator.clipboard.writeText(contract.textContent);
+            
+            // Show toast notification
+            const toast = document.getElementById('toast');
+            toast.style.visibility = 'visible';
+            setTimeout(() => {
+                toast.style.visibility = 'hidden';
+            }, 2000);
+        }
+
+        // Replace with your actual contract address
+        document.getElementById('contractAddress').textContent = '0x895090ddfd72088d351f3a49529d7004ef6730e7';
     </script>
 </body>
 </html>
