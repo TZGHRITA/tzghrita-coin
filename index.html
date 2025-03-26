@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tzghrita ($TZGH)</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #E2725B; /* terracotta */
+            color: #2A1A1F; /* dark brown */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .play-btn {
+            background-color: #2A1A1F;
+            color: #F5F5DC;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.1s;
+            margin: 2rem 0;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .play-btn:active {
+            transform: scale(0.98);
+        }
+
+        footer {
+            margin-top: 3rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        audio {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="tzghrita.png" alt="Tzghrita Logo" class="logo">
+        <h1>Tzghrita ($TZGH)</h1>
+        <p class="tagline">The Sound of Celebration on the Blockchain!</p>
+        
+        <button class="play-btn" onclick="playSound()">Play Tzghrita</button>
+        
+        <audio id="tzghritaSound" src="tzghrita.mp3"></audio>
+        
+        <footer>Join the celebration with $TZGH!</footer>
+    </div>
+
+    <script>
+        function playSound() {
+            const sound = document.getElementById('tzghritaSound');
+            sound.currentTime = 0; // Rewind to start
+            sound.play().catch(e => console.log("Audio play failed:", e));
+        }
+    </script>
+</body>
+</html>
